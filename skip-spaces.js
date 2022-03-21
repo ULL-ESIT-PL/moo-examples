@@ -35,7 +35,7 @@ const lex = moo.compile({
 
 console.log(moo.fallback);
 
-const result = [...lex.reset('while ( a < 3 ) { a += 1; } --;--')];
+const result = [...lex.reset('while ( a < 3 ) { a += 1; }')];
 //console.log(result);
 /*
 [

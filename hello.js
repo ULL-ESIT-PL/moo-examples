@@ -1,4 +1,4 @@
-const moo = require('../moo')
+const moo = require('moo')
 const inspect = require('util').inspect;
 const ins = (x) => console.log(inspect(x, {depth: null}));
 debugger;

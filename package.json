@@ -27,6 +27,7 @@
     "tokenizer2": "^2.0.0"
   },
   "dependencies": {
-    "moo": "^0.5.1"
+    "moo": "^0.5.1",
+    "moo-ignore": "^2.5.1"
   }
 }

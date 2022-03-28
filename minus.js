@@ -1,7 +1,7 @@
 const { makeLexer } = require("moo-ignore");
 const TokenDef = {
     WS: {match: /\s+/, lineBreaks: true},
-    comment: /\/\/.*/,
+    comment: /\/\*.*\*\//,
     number: /[-+]?\d+(?:\.\d*)?(?:[eE][-+]?\d+)?/,
     minus: '-', 
     lparen: '(',

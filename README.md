@@ -5,31 +5,6 @@ Moo!
 
 Moo is a highly-optimised tokenizer/lexer generator. Use it to tokenize your strings, before parsing 'em with a parser like [nearley](https://github.com/hardmath123/nearley) or whatever else you're into.
 
-* [Fast](#is-it-fast)
-* [Convenient](#usage)
-* uses [Regular Expressions](#on-regular-expressions)
-* tracks [Line Numbers](#line-numbers)
-* handles [Keywords](#keywords)
-* supports [States](#states)
-* custom [Errors](#errors)
-* is even [Iterable](#iteration)
-* has no dependencies
-* 4KB minified + gzipped
-* Moo!
-
-Is it fast?
------------
-
-Yup! Flying-cows-and-singed-steak fast.
-
-Moo is the fastest JS tokenizer around. It's **~2–10x** faster than most other tokenizers; it's a **couple orders of magnitude** faster than some of the slower ones.
-
-Define your tokens **using regular expressions**. Moo will compile 'em down to a **single RegExp for performance**. It uses the new ES6 **sticky flag** where possible to make things faster; otherwise it falls back to an almost-as-efficient workaround. (For more than you ever wanted to know about this, read [adventures in the land of substrings and RegExps](http://mrale.ph/blog/2016/11/23/making-less-dart-faster.html).)
-
-You _might_ be able to go faster still by writing your lexer by hand rather than using RegExps, but that's icky.
-
-Oh, and it [avoids parsing RegExps by itself](https://hackernoon.com/the-madness-of-parsing-real-world-javascript-regexps-d9ee336df983#.2l8qu3l76). Because that would be horrible.
-
 
 Usage
 -----
@@ -357,7 +332,7 @@ Use [itt](https://www.npmjs.com/package/itt)'s iteration tools with Moo.
 ```
 
 
-Transform
+value Transform
 ---------
 
 Moo doesn't allow capturing groups, but you can supply a transform function, `value()`, which will be called on the value before storing it in the Token object.
@@ -373,11 +348,4 @@ Moo doesn't allow capturing groups, but you can supply a transform function, `va
     })
 ```
 
-
-Contributing
-------------
-
-Do check the [FAQ](https://github.com/tjvr/moo/issues?q=label%3Aquestion).
-
-Before submitting an issue, [remember...](https://github.com/tjvr/moo/blob/master/.github/CONTRIBUTING.md)
 

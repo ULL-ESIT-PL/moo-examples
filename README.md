@@ -153,11 +153,11 @@ Keywords can also have **individual types**.
     lexer.next() // -> { type: 'name', value: 'foo' }
 ```
 
-## Errors
+## Error management
 
 If none of your rules match, Moo will throw an Error; since it doesn't know what else to do.
 
-If you prefer, you can have moo return an error token instead of throwing an exception. The error token will contain the whole of the rest of the buffer.
+If you prefer, you can use **moo.error** to make moo return an **error token** instead of throwing an exception. The error token will contain the whole of the rest of the buffer.
 
 ```js
     moo.compile({

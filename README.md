@@ -171,47 +171,7 @@ You can use `Object.fromEntries` to easily construct keyword objects:
 Object.fromEntries(['class', 'def', 'if'].map(k => ['kw-' + k, k]))
 ```
 
-
-## States
-
-Moo allows you to define multiple lexer **states**. Each state defines its own separate set of token rules. Your lexer will start off in the first state given to `moo.states({})`.
-
-Rules can be annotated with `next`, `push`, and `pop`, to change the current state after that token is matched. A "stack" of past states is kept, which is used by `push` and `pop`.
-
-* **`next: 'bar'`** moves to the state named `bar`. (The stack is not changed.)
-* **`push: 'bar'`** moves to the state named `bar`, and pushes the old state onto the stack.
-* **`pop: 1`** removes one state from the top of the stack, and moves to that state. (Only `1` is supported.)
-
-Only rules from the current state can be matched. You need to copy your rule into all the states you want it to be matched in.
-
-For example, to tokenize JS-style string interpolation such as `a${{c: d}}e`, you might use:
-
-```js
-    let lexer = moo.states({
-      main: {
-        strstart: {match: '`', push: 'lit'},
-        ident:    /\w+/,
-        lbrace:   {match: '{', push: 'main'},
-        rbrace:   {match: '}', pop: 1},
-        colon:    ':',
-        space:    {match: /\s+/, lineBreaks: true},
-      },
-      lit: {
-        interp:   {match: '${', push: 'main'},
-        escape:   /\\./,
-        strend:   {match: '`', pop: 1},
-        const:    {match: /(?:[^$`]|\$(?!\{))+/, lineBreaks: true},
-      },
-    })
-    // <= `a${{c: d}}e`
-    // => strstart const interp lbrace ident colon space ident rbrace rbrace const strend
-```
-
-The `rbrace` rule is annotated with `pop`, so it moves from the `main` state into either `lit` or `main`, depending on the stack.
-
-
-Errors
-------
+## Errors
 
 If none of your rules match, Moo will throw an Error; since it doesn't know what else to do.
 
@@ -255,8 +215,7 @@ Error: invalid syntax at line 2 col 15:
 ```
 
 
-Iteration
----------
+## Iteration
 
 Iterators: we got 'em.
 
@@ -281,10 +240,10 @@ Use [itt](https://www.npmjs.com/package/itt)'s iteration tools with Moo.
 ```
 
 
-value Transform
----------
+## value Transform
 
-Moo doesn't allow capturing groups, but you can supply a transform function, `value()`, which will be called on the value before storing it in the Token object.
+**Moo doesn't allow capturing groups**, 
+but you can supply a transform function, `value()`, which will be called on the value before storing it in the Token object.
 
 ```js
     moo.compile({
@@ -305,54 +264,39 @@ See examples
 * [moo-ignore/minus.js](moo-ignore/minus.js)
 
 
-## On Regular Expressions
+## Advanceed: States
 
-RegExps are nifty for making tokenizers, but they can be a bit of a pain. Here are some things to be aware of:
+Moo allows you to define multiple lexer **states**. Each state defines its own separate set of token rules. Your lexer will start off in the first state given to `moo.states({})`.
 
-* You often want to use **non-greedy quantifiers**: e.g. `*?` instead of `*`. Otherwise your tokens will be longer than you expect:
+Rules can be annotated with `next`, `push`, and `pop`, to change the current state after that token is matched. A "stack" of past states is kept, which is used by `push` and `pop`.
 
-    ```js
-    let lexer = moo.compile({
-      string: /".*"/,   // greedy quantifier *
-      // ...
+* **`next: 'bar'`** moves to the state named `bar`. (The stack is not changed.)
+* **`push: 'bar'`** moves to the state named `bar`, and pushes the old state onto the stack.
+* **`pop: 1`** removes one state from the top of the stack, and moves to that state. (Only `1` is supported.)
+
+Only rules from the current state can be matched. You need to copy your rule into all the states you want it to be matched in.
+
+For example, to tokenize JS-style string interpolation such as `a${{c: d}}e`, you might use:
+
+```js
+    let lexer = moo.states({
+      main: {
+        strstart: {match: '`', push: 'lit'},
+        ident:    /\w+/,
+        lbrace:   {match: '{', push: 'main'},
+        rbrace:   {match: '}', pop: 1},
+        colon:    ':',
+        space:    {match: /\s+/, lineBreaks: true},
+      },
+      lit: {
+        interp:   {match: '${', push: 'main'},
+        escape:   /\\./,
+        strend:   {match: '`', pop: 1},
+        const:    {match: /(?:[^$`]|\$(?!\{))+/, lineBreaks: true},
+      },
     })
+    // <= `a${{c: d}}e`
+    // => strstart const interp lbrace ident colon space ident rbrace rbrace const strend
+```
 
-    lexer.reset('"foo" "bar"')
-    lexer.next() // -> { type: 'string', value: 'foo" "bar' }
-    ```
-
-    Better:
-
-    ```js
-    let lexer = moo.compile({
-      string: /".*?"/,   // non-greedy quantifier *?
-      // ...
-    })
-
-    lexer.reset('"foo" "bar"')
-    lexer.next() // -> { type: 'string', value: 'foo' }
-    lexer.next() // -> { type: 'space', value: ' ' }
-    lexer.next() // -> { type: 'string', value: 'bar' }
-    ```
-
-* The **order of your rules** matters. Earlier ones will take precedence.
-
-    ```js
-    moo.compile({
-        identifier:  /[a-z0-9]+/,
-        number:  /[0-9]+/,
-    }).reset('42').next() // -> { type: 'identifier', value: '42' }
-
-    moo.compile({
-        number:  /[0-9]+/,
-        identifier:  /[a-z0-9]+/,
-    }).reset('42').next() // -> { type: 'number', value: '42' }
-    ```
-
-* Moo uses **multiline RegExps**. This has a few quirks: for example, the **dot `/./` doesn't include newlines**. Use `[^]` instead if you want to match newlines too.
-
-* Since an excluding character ranges like `/[^ ]/` (which matches anything but a space) _will_ include newlines, you have to be careful not to include them by accident! In particular, the whitespace metacharacter `\s` includes newlines.
-
-
-
-
+The `rbrace` rule is annotated with `pop`, so it moves from the `main` state into either `lit` or `main`, depending on the stack.

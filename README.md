@@ -112,7 +112,9 @@ Moo makes it convenient to define literals.
     })
 ```
 
-It'll automatically compile them into regular expressions, escaping them where necessary. See [hello.js](hello.js) for a complete example.
+It'll automatically compile them into regular expressions, escaping them where necessary. 
+
+**See [hello.js](hello.js) for a complete example**
 
 **Keywords** should be written using the `keywords` transform.
 

@@ -153,7 +153,7 @@ Keywords can also have **individual types**.
     lexer.next() // -> { type: 'name', value: 'foo' }
 ```
 
-## Error management
+## Error management with Error Tokens
 
 If none of your rules match, Moo will throw an Error; since it doesn't know what else to do.
 

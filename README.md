@@ -2,7 +2,7 @@
 
 # Moo
 
-[Moo](https://www.npmjs.com/package/moo) is a highly-optimised tokenizer/lexer generator. Use it to tokenize your strings, before parsing 'em with a parser like [nearley](https://github.com/hardmath123/nearley) or whatever else you're into.
+[Moo](https://www.npmjs.com/package/moo ) is a highly-optimised tokenizer/lexer generator. Use it to tokenize your strings, before parsing 'em with a parser like [nearley](https://github.com/hardmath123/nearley) or whatever else you're into.
 
 
 Usage
@@ -128,22 +128,13 @@ let lexer = moo.compile({
 });
 ```
 
+For the first example, the `moo.keywords` helper checks matches against the list of keywords; if any of them match, it uses the type `'keyword'` instead of `'identifier'`.
+
+For the second example, the `moo.keywords` helper checks matches against the list `['(', ')']`; if any of them match, it uses the type `'paren'` instead of `'ANY'`.
+
 See example [keywords.js](keywords.js) for a complete example.
 
-### Why? ###
 
-You need to do this to ensure the **longest match** principle applies, even in edge cases.
-
-Imagine trying to parse the input `className` with the following rules:
-
-```js
-    keyword: ['class'],
-    identifier: /[a-zA-Z]+/,
-```
-
-You'll get _two_ tokens — `['class', 'Name']` -- which is _not_ what you want! If you swap the order of the rules, you'll fix this example; but now you'll lex `class` wrong (as an `identifier`).
-
-The keywords helper checks matches against the list of keywords; if any of them match, it uses the type `'keyword'` instead of `'identifier'` (for this example).
 
 
 ## Keyword Types 

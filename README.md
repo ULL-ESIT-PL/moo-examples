@@ -116,17 +116,20 @@ It'll automatically compile them into regular expressions, escaping them where n
 
 **See [hello.js](hello.js) for a complete example**
 
-**Keywords** should be written using the `keywords` transform.
+## moo.Keywords as a way to manage wide regexps
 
 ```js
-    moo.compile({
-      IDEN: {match: /[a-zA-Z]+/, type: moo.keywords({
-        KW: ['while', 'if', 'else', 'moo', 'cows'],
+let lexer = moo.compile({
+    ws: { match: /\s+/, lineBreaks: true },
+    number: /0|[1-9][0-9]*/,
+    IDEN: {match: /[a-zA-Z]+/, type: moo.keywords({
+        KW: ['while', 'moo'],
       })},
-      SPACE: {match: /\s+/, lineBreaks: true},
-    })
+    ANY: { match: /./, type: moo.keywords({ paren: ['(', ')'] }) }
+});
 ```
 
+See example [keywords.js](keywords.js) for a complete example.
 
 ### Why? ###
 

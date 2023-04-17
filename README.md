@@ -175,9 +175,12 @@ You can have a token type that both matches tokens _and_ contains error values.
 ```js
     moo.compile({
       // ...
-      myError: {match: /[\$?`]/, error: true},
+      myError: {match: /[abc]/, error: true},
     })
 ```
+
+So that the token `miError` will be produced for both a match of `/[abc]/` and for 
+any error produced during the lexical analysis
 
 ## Formatting errors 
 

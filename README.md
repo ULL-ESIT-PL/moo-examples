@@ -9,9 +9,7 @@ Moo is a highly-optimised tokenizer/lexer generator. Use it to tokenize your str
 Usage
 -----
 
-First, you need to do the needful: `$ npm install moo`, or whatever will ship this code to your computer. Alternatively, grab the `moo.js` file by itself and slap it into your web page via a `<script>` tag; moo is completely standalone.
-
-Then you can start roasting your very own lexer/tokenizer:
+First, you need to do the needful: `$ npm install moo`.
 
 ```js
     const moo = require('moo')
@@ -41,57 +39,6 @@ And now throw some text at it:
 
 When you reach the end of Moo's internal buffer, next() will return `undefined`. You can always `reset()` it and feed it more data when that happens.
 
-
-On Regular Expressions
-----------------------
-
-RegExps are nifty for making tokenizers, but they can be a bit of a pain. Here are some things to be aware of:
-
-* You often want to use **non-greedy quantifiers**: e.g. `*?` instead of `*`. Otherwise your tokens will be longer than you expect:
-
-    ```js
-    let lexer = moo.compile({
-      string: /".*"/,   // greedy quantifier *
-      // ...
-    })
-
-    lexer.reset('"foo" "bar"')
-    lexer.next() // -> { type: 'string', value: 'foo" "bar' }
-    ```
-
-    Better:
-
-    ```js
-    let lexer = moo.compile({
-      string: /".*?"/,   // non-greedy quantifier *?
-      // ...
-    })
-
-    lexer.reset('"foo" "bar"')
-    lexer.next() // -> { type: 'string', value: 'foo' }
-    lexer.next() // -> { type: 'space', value: ' ' }
-    lexer.next() // -> { type: 'string', value: 'bar' }
-    ```
-
-* The **order of your rules** matters. Earlier ones will take precedence.
-
-    ```js
-    moo.compile({
-        identifier:  /[a-z0-9]+/,
-        number:  /[0-9]+/,
-    }).reset('42').next() // -> { type: 'identifier', value: '42' }
-
-    moo.compile({
-        number:  /[0-9]+/,
-        identifier:  /[a-z0-9]+/,
-    }).reset('42').next() // -> { type: 'number', value: '42' }
-    ```
-
-* Moo uses **multiline RegExps**. This has a few quirks: for example, the **dot `/./` doesn't include newlines**. Use `[^]` instead if you want to match newlines too.
-
-* Since an excluding character ranges like `/[^ ]/` (which matches anything but a space) _will_ include newlines, you have to be careful not to include them by accident! In particular, the whitespace metacharacter `\s` includes newlines.
-
-
 Line Numbers
 ------------
 
@@ -106,7 +53,7 @@ Note that this is `false` by default, for performance reasons: counting the numb
 ```
 
 
-### Token Info ###
+## Token Info 
 
 Token objects (returned from `next()`) have the following attributes:
 
@@ -119,7 +66,7 @@ Token objects (returned from `next()`) have the following attributes:
 * **`col`**: the column where the match begins, starting from 1.
 
 
-### Value vs. Text ###
+## Value vs. Text 
 
 The `value` is the same as the `text`, unless you provide a [value transform](#transform).
 
@@ -136,7 +83,7 @@ lexer.next() /* { value: 'test', text: '"test"', ... } */
 ```
 
 
-### Reset ###
+## Reset
 
 Calling `reset()` on your lexer will empty its internal buffer, and set the line, column, and offset counts back to their initial value.
 
@@ -153,8 +100,7 @@ If you don't want this, you can `save()` the state, and later pass it as the sec
 ```
 
 
-Keywords
---------
+## Keywords
 
 Moo makes it convenient to define literals.
 
@@ -166,7 +112,7 @@ Moo makes it convenient to define literals.
     })
 ```
 
-It'll automatically compile them into regular expressions, escaping them where necessary.
+It'll automatically compile them into regular expressions, escaping them where necessary. See [hello.js](hello.js) for a complete example.
 
 **Keywords** should be written using the `keywords` transform.
 
@@ -196,7 +142,7 @@ You'll get _two_ tokens — `['class', 'Name']` -- which is _not_ what you want!
 The keywords helper checks matches against the list of keywords; if any of them match, it uses the type `'keyword'` instead of `'identifier'` (for this example).
 
 
-### Keyword Types ###
+## Keyword Types 
 
 Keywords can also have **individual types**.
 
@@ -222,8 +168,7 @@ Object.fromEntries(['class', 'def', 'if'].map(k => ['kw-' + k, k]))
 ```
 
 
-States
-------
+## States
 
 Moo allows you to define multiple lexer **states**. Each state defines its own separate set of token rules. Your lexer will start off in the first state given to `moo.states({})`.
 
@@ -288,7 +233,7 @@ You can have a token type that both matches tokens _and_ contains error values.
     })
 ```
 
-### Formatting errors ###
+## Formatting errors 
 
 If you want to throw an error from your parser, you might find `formatError` helpful. Call it with the offending token:
 
@@ -347,5 +292,63 @@ Moo doesn't allow capturing groups, but you can supply a transform function, `va
       // ...
     })
 ```
+
+## Skip 
+
+See examples
+
+* [skip-spaces.js](skip-spaces.js)
+* [moo-ignore/minus.js](moo-ignore/minus.js)
+
+
+## On Regular Expressions
+
+RegExps are nifty for making tokenizers, but they can be a bit of a pain. Here are some things to be aware of:
+
+* You often want to use **non-greedy quantifiers**: e.g. `*?` instead of `*`. Otherwise your tokens will be longer than you expect:
+
+    ```js
+    let lexer = moo.compile({
+      string: /".*"/,   // greedy quantifier *
+      // ...
+    })
+
+    lexer.reset('"foo" "bar"')
+    lexer.next() // -> { type: 'string', value: 'foo" "bar' }
+    ```
+
+    Better:
+
+    ```js
+    let lexer = moo.compile({
+      string: /".*?"/,   // non-greedy quantifier *?
+      // ...
+    })
+
+    lexer.reset('"foo" "bar"')
+    lexer.next() // -> { type: 'string', value: 'foo' }
+    lexer.next() // -> { type: 'space', value: ' ' }
+    lexer.next() // -> { type: 'string', value: 'bar' }
+    ```
+
+* The **order of your rules** matters. Earlier ones will take precedence.
+
+    ```js
+    moo.compile({
+        identifier:  /[a-z0-9]+/,
+        number:  /[0-9]+/,
+    }).reset('42').next() // -> { type: 'identifier', value: '42' }
+
+    moo.compile({
+        number:  /[0-9]+/,
+        identifier:  /[a-z0-9]+/,
+    }).reset('42').next() // -> { type: 'number', value: '42' }
+    ```
+
+* Moo uses **multiline RegExps**. This has a few quirks: for example, the **dot `/./` doesn't include newlines**. Use `[^]` instead if you want to match newlines too.
+
+* Since an excluding character ranges like `/[^ ]/` (which matches anything but a space) _will_ include newlines, you have to be careful not to include them by accident! In particular, the whitespace metacharacter `\s` includes newlines.
+
+
 
 

@@ -23,10 +23,10 @@ console.log(lexer.next()) // -> { type: 'keyword', value: 'while' }
 console.log(lexer.next()) // -> { type: 'WS', value: ' ' }
 console.log(lexer.next()) // -> { type: 'lparen', value: '(' }
 console.log(lexer.next()) // -> { type: 'number', value: '10' }
-console.log(lexer.next()) // )
-console.log(lexer.next()) // cows
-console.log(lexer.next()) // "\n"
-console.log(lexer.next()) // moo
-console.log('result='+ins(lexer.next())) // undefined
-console.log('result='+ins(lexer.next())) //
-console.log('result='+ins(lexer.next())) //
+console.log(lexer.next()) // -> { type: 'rparen', value: ')' }
+console.log(lexer.next()) // -> { type: 'WS', value: ' ' }
+console.log(lexer.next()) // -> { type: 'NL', value: '\n'}
+console.log(lexer.next()) // -> { type: 'keyword', value: 'moo' }
+console.log('result='+ins(lexer.next())) // -> undefined
+console.log('result='+ins(lexer.next())) // -> undefined
+console.log('result='+ins(lexer.next())) // -> undefined

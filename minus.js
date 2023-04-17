@@ -4,11 +4,10 @@ const TokenDef = {
     comment: /\/\*.*\*\//,
     number: /[-+]?\d+(?:\.\d*)?(?:[eE][-+]?\d+)?/,
     minus: '-', 
-    lparen: '(',
-    rparen: ')',
 };
 
 lexer = makeLexer(TokenDef, ["WS", "comment"]);
 lexer.reset('3-2');
+//lexer.reset('3-/* a multiline\ncomment */2')
 let tokens = [...lexer];
 console.log(tokens.length);

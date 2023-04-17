@@ -115,7 +115,7 @@ It'll automatically compile them into regular expressions, escaping them where n
 
 **See [hello.js](hello.js) for a complete example**
 
-## moo.Keywords as a way to manage wide regexps
+## moo.keywords as a way to manage wide regexps
 
 ```js
 let lexer = moo.compile({
@@ -134,9 +134,6 @@ For the second example, the `moo.keywords` helper checks matches against the lis
 
 See example [keywords.js](keywords.js) for a complete example.
 
-
-
-
 ## Keyword Types 
 
 Keywords can also have **individual types**.
@@ -144,22 +141,16 @@ Keywords can also have **individual types**.
 ```js
     let lexer = moo.compile({
       name: {match: /[a-zA-Z]+/, type: moo.keywords({
-        'kw-class': 'class',
-        'kw-def': 'def',
-        'kw-if': 'if',
+        'class': 'class',
+        'def': 'def',
+        'if': 'if',
       })},
       // ...
     })
     lexer.reset('def foo')
-    lexer.next() // -> { type: 'kw-def', value: 'def' }
+    lexer.next() // -> { type: 'def', value: 'def' }
     lexer.next() // space
     lexer.next() // -> { type: 'name', value: 'foo' }
-```
-
-You can use `Object.fromEntries` to easily construct keyword objects:
-
-```js
-Object.fromEntries(['class', 'def', 'if'].map(k => ['kw-' + k, k]))
 ```
 
 ## Errors

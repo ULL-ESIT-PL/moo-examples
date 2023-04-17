@@ -264,9 +264,9 @@ See examples
 * [moo-ignore/minus.js](moo-ignore/minus.js)
 
 
-## Advanceed: States
+## Advanced: States
 
-Moo allows you to define multiple lexer **states**. Each state defines its own separate set of token rules. Your lexer will start off in the first state given to `moo.states({})`.
+Similar to Lex and Flex, Moo allows you to define multiple lexer **states**. Each state defines its own separate set of token rules. Your lexer will start off in the first state given to `moo.states({})`.
 
 Rules can be annotated with `next`, `push`, and `pop`, to change the current state after that token is matched. A "stack" of past states is kept, which is used by `push` and `pop`.
 

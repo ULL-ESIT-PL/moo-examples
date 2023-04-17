@@ -293,7 +293,7 @@ Moo doesn't allow capturing groups, but you can supply a transform function, `va
     })
 ```
 
-## Skip 
+## Skipping tokens
 
 See examples
 

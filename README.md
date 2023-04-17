@@ -157,7 +157,7 @@ Keywords can also have **individual types**.
 
 If none of your rules match, Moo will throw an Error; since it doesn't know what else to do.
 
-If you prefer, you can use **moo.error** to make moo return an **error token** instead of throwing an exception. The error token will contain the whole of the rest of the buffer.
+If you prefer, you can use **moo.error** to make moo return an **error token** instead of throwing an exception. The `value` of the error token will contain the whole of the rest of the buffer.
 
 ```js
     moo.compile({

@@ -1,4 +1,4 @@
-var moo = require('../moo')
+var moo = require('moo')
 
 
 function assert(x) {

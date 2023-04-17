@@ -14,8 +14,7 @@
   "license": "BSD-3-Clause",
   "scripts": {
     "test": "jest .",
-    "benchmark": "benchr test/benchmark.js",
-    "moo": "echo 'Mooooo!'"
+    "benchmark": "benchr test/benchmark.js"
   },
   "devDependencies": {
     "benchr": "^3.2.0",

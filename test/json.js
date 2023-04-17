@@ -1,5 +1,5 @@
 
-const moo = require('../moo')
+const moo = require('moo')
 
 let lexer = moo.compile({
   '{': '{',

@@ -1,5 +1,5 @@
 
-const moo = require('../moo')
+const moo = require('moo')
 
 let toshLexer = moo.compile([
   {type: 'symbol',  match: Array.from('-%#+*/=^,?')},  // single character

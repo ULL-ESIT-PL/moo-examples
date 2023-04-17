@@ -1,7 +1,7 @@
 
 const fs = require('fs')
 
-const moo = require('../moo')
+const moo = require('moo')
 
 function reEscape(pat) {
   if (typeof pat === 'string') {
